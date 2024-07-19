@@ -109,6 +109,108 @@ Get-DomainGPO -ComputerIdentity computer_name
  ```
 Get-DomainGPOLocalGroup
 ```
+#### Users which are in a local group of a machine using GPO
+```
+Get-DomainGPOComputerLocalGroupMapping -ComputerIdentity comp_name
+```
+#### Machines where the given user is a member of specific group 
+```
+Get-DomainGPOUserLocalGroupMapping -Identity user_name -Verbose
+```
+### OU Enumeration
+#### OUs in a Domain
+```
+Get-DomainOU
+```
+#### GPO Applied on an OU 
+```
+Get-NetOU
+Get-DomainDomainGPO -Identity "GPOName"
+```
+### ACL Enumeration
+#### ACLs associated with specified object
+```
+Get-DomainObjectAcl -samaccountname name -ResolveGUIDs
+```
+#### ACLs associated with the specified prefix to be used for search 
+```
+Get-DomainObjectAcl -SearchBase "LDAP://CN=Domain Admins, CN=Users, DC=dcname -ResolveGUIDs -Verbose
+```
+#### Searching for Interesting ACEs
+```
+FindInterestingDomainACL -ResolveGUIDs
+```
+#### ACLs associated with the specified path 
+```
+Get-PathAcl -Path "\\dc.domain\sysvol"
+```
+### Trust Enumeration
+#### All Domain Trust for the current and other domains
+```
+Get-DomainTrust
+Get-DomainTrust -Domain domain_name
+```
+#### Forest Mapping
+```
+Get-Forest
+Get-Forest -Forest forest_name
+```
+#### Domains in the current forest
+```
+Get-ForestDomain
+Get-ForestDomain -Forest forest_name
+```
+#### Global Catalog for the current forest
+```
+Get-ForestGlobalCatalog -Forest forest_name
+```
+### User Hunting
+#### Machine on the current domain where the user has local admin access
+```
+Find-LocalAdminAccess -Verbose
+```
+#### Computers where a DA (or specified user/group) has sessions
+```
+Find-DomainUserLocation
+Find-DomainUserLocation -UserGroupIdentity "Group_name"
+```
+#### Computers where a DA session is available and current user has admin access
+```
+Find-DomainUserLocation -CheckAccess
+```
+#### Computers (File Servers and Distributed FS) where a DA session is available
+```
+Find-DomainUserLocation -Stealth
+```
+#### List Sessions on Remote Machine
+```
+Invoke-SessionHunter -FailSafe
+```
+#### List Sessions on Remote Machine (OPSEC Friendly)
+```
+Invoke-SessionHunter -NoPortScan -Targets Target_file_path
+```
+### BloodHound 
+```
+SharpHound.ps1
+```
+```
+Invoke-BloodHound -CollectionMethod All
+```
+```
+SharpHound.exe
+```
+#### BloodHound Stealther Usage 
+```
+Invoke-BloodHound -Stealth
+```
+```
+SharpHound.exe --stealth
+```
+#### Avoiding MDI 
+```
+Invoke-BloodHound -ExcludeDCs
+```
 
 
 
