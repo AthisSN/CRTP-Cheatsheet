@@ -3,8 +3,9 @@
 # Domain Enumeration
 
 #### PowerView Script 
+https://github.com/EmpireProject/Empire/blob/master/data/module_source/situational_awareness/network/powerview.ps1
 ```
-https://github.com/PowerShellMafia/PowerSploit/blob/master/Recon/PowerView.ps1
+Import-Module .\PowerView.ps1
 ```
 #### Current and Other Domain Enumeration
 ```
